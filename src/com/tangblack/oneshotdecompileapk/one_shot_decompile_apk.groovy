@@ -6,10 +6,18 @@ import static groovy.io.FileType.FILES
  * Created by tangblack on 2016/2/11.
  */
 
-
+/**
+ *
+ * @param command
+ * http://www.joergm.com/2010/09/executing-shell-commands-in-groovy/
+ */
 def void execute(String command)
 {
-    println command.execute().text
+//    println command.execute().text
+    def process =
+            new ProcessBuilder("bash", "-c", command).redirectErrorStream(true).start() // -c : Read commands from the following string and assign any arguments to the positional parameters.
+    process.inputStream.eachLine {println it}
+    process.waitFor()
 }
 
 def List listFilesMatching(String targetPath, String fileType)
